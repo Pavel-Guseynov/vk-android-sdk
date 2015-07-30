@@ -24,6 +24,7 @@ package com.vk.sdk.dialogs;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
@@ -34,8 +35,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -176,7 +175,6 @@ public class VKShareDialog extends DialogFragment {
         return this;
     }
 
-    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Context context = getActivity();
@@ -235,20 +233,8 @@ public class VKShareDialog extends DialogFragment {
         result.requestWindowFeature(Window.FEATURE_NO_TITLE);
         result.setContentView(mInternalView);
         result.setCancelable(true);
-        result.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialogInterface) {
-                if (mListener != null) {
-                    mListener.onVkShareCancel();
-                }
-                VKShareDialog.this.dismiss();
-            }
-        });
-
-
         return result;
     }
-
 
     @Override
     @SuppressLint("NewApi")
@@ -429,6 +415,14 @@ public class VKShareDialog extends DialogFragment {
     @Override
     public void onCancel(DialogInterface dialog) {
         super.onCancel(dialog);
+        if (mListener != null) {
+            mListener.onVkShareCancel();
+        }
+    }
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        super.onDismiss(dialog);
         if (mListener != null) {
             mListener.onVkShareCancel();
         }
